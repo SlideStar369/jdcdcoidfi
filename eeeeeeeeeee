@@ -1,33 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Search</title>
-    <script>
-        function openSearch(event) {
-            event.preventDefault(); // Prevent the default form submission
-            const query = document.getElementById('searchInput').value;
-            const newWindow = window.open('about:blank'); // Open a new blank tab
-            newWindow.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Redirect to Google
-        }
-    </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Google Search</h1>
-    <form onsubmit="openSearch(event)">
-        <input type="text" id="searchInput" placeholder="Enter your search query" required>
-        <button type="submit">Search</button>
-    </form>
-    <p>The search results will open in a new blank tab.</p>
-</body>
-</html>
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
+const app = express();
 
+// Middleware to log the request details
+app.use((req, res, next) => {
+    console.log(`Proxying request: ${req.method} ${req.url}`);
+    next();
+});
 
+// Proxy configuration
+app.use('/proxy', createProxyMiddleware({
+    target: 'https://www.google.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/proxy': '', // remove /proxy from the request
+    },
+    onProxyReq: (proxyReq, req, res) => {
+        // Modify request headers if needed
+    },
+    onProxyRes: (proxyRes, req, res) => {
+        // Modify response headers if needed
+    }
+}));
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Proxy server running at http://localhost:${PORT}`);
+});
