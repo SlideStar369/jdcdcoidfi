@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxy Google Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-    </style>
+    <title>Simple Search Engine</title>
     <script>
         function performSearch(event) {
             event.preventDefault(); // Prevent the default form submission
             const query = document.getElementById('searchInput').value;
-            const proxyUrl = `http://localhost:3000/proxy?q=${encodeURIComponent(query)}`;
-            window.open(proxyUrl, '_blank'); // Open the proxy URL in a new tab
+            const newWindow = window.open('about:blank'); // Open a new blank tab
+            newWindow.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`; // Redirect to Google
         }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Proxy Google Search</h1>
+    <h1>Simple Search Engine</h1>
     <form onsubmit="performSearch(event)">
         <input type="text" id="searchInput" placeholder="Enter your search query" required>
         <button type="submit">Search</button>
     </form>
-    <p>The search results will open in a new tab via the proxy.</p>
+    <p>Your search will open in a new blank tab.</p>
 </body>
 </html>
